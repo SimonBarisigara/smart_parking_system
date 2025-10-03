@@ -195,10 +195,10 @@ void lcd_data(unsigned char data)
 // function to initialize the LCD for FRIDGE
 void lcd_init()
 {
-	lcd_cmd(0x38); // all lines and a 5x7 matrix
-	lcd_cmd(0x0c); // display on, cursor off
-	lcd_cmd(0x06); // increment cursor
-	lcd_cmd(0x01); // clear screen
+	lcd_cmd(0x38);
+	lcd_cmd(0x0c); 
+	lcd_cmd(0x06); 
+	lcd_cmd(0x01); 
 }
 
 // function to print data to the LCD for FRIDGE
@@ -210,29 +210,25 @@ void lcd_data_print(char info[])
 		lcd_data(info[a]);
 	}
 }
-//*********************************************************************************************************************************************************************
-///////////////////////////////////////////////////////////////////////////////////////////REST OF FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // function to capture the drinks
 void captureDrinks()
 {
 	lcd_init();
-	lcd_cmd(0x01); // clear screen
+	lcd_cmd(0x01); 
 
-	lcd_cmd(0x80); // row 1
+	lcd_cmd(0x80); 
 	lcd_data_print("FRIDGE.");
 	latch();
 
-	// enter number of drinks // NOTE that here we take in a max of 9 drinks at a time
-	lcd_cmd(0xC0); // row 2
+	lcd_cmd(0xC0); 
 	lcd_data_print("Number of drinks: ");
 	latch();
 	int bottle = keypad();
 	while (bottle < 0 || bottle > 9)
 	{
-		// Keep prompting until a valid single-digit number is entered
 		bottle = keypad();
 	}
-	char bottles[2]; // Size 2 for single-digit number and null terminator
+	char bottles[2]; 
 	sprintf(bottles, "%d", bottle);
 	lcd_cmd(0xD3);
 	lcd_data_print(bottles);
