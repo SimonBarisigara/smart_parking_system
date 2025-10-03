@@ -20,9 +20,9 @@
 
 ISR(INT0_vect)
 {
-	displayWelcome(); // Call the function to display the welcome message
+	displayWelcome();
 	_delay_ms(10);
-	//car_approaching();
+	
 	buzzer();
 	
 	
@@ -37,13 +37,12 @@ char EEPROM_read(uint16_t uiAddress)
 	
 	/* Wait for completion of previous write */
 	while(EECR & (1<<EEPE));
-	/* Set up address register */
+	
 	EEARH = (uiAddress & 0xFF00) >> 8;
 	EEARL = (uiAddress & 0x00FF);
 	/* Start eeprom read by writing EERE */
 	EECR |= (1<<EERE);
-	/* Return data from Data Register */
-	// *data = EEDR;
+	
 	return EEDR;
 }
 
@@ -57,16 +56,11 @@ void EEPROM_write(uint16_t uiAddress, char ucData)
 	EEARH = (uiAddress & 0xFF00) >> 8;
 	EEARL = (uiAddress & 0x00FF);
 	EEDR = ucData;
-	/* Write logical one to EEMPE */
 	EECR |= (1<<EEMPE);
-	/* Start eeprom write by setting EEPE */
 	EECR |= (1<<EEPE);
 
 }
 
-// *********************************************************************************************************************************************************************
-
-//*********************************************************************************************************************************************************************
 // function for keypad at the Fridge
 int keypad()
 {
