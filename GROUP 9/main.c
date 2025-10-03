@@ -179,8 +179,7 @@ void latch()
 void lcd_cmd(unsigned char cmd)
 {
 	PORTH = cmd;
-	PORTG &= ~(1 << PG0); // RS=0 FOR command mode
-	PORTG &= ~(1 << PG1); // RW=0 FOR write mode
+	PORTG &= ~(1 << PG0); 
 	latch();
 }
 
@@ -188,8 +187,8 @@ void lcd_cmd(unsigned char cmd)
 void lcd_data(unsigned char data)
 {
 	PORTH = data;
-	PORTG |= (1 << PG0);  // RS=0 FOR data mode
-	PORTG &= ~(1 << PG1); // RW=0 FOR write mode
+	PORTG |= (1 << PG0);  
+	PORTG &= ~(1 << PG1); 
 	latch();
 }
 
