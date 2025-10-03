@@ -120,8 +120,6 @@ int keypad()
 
 	return 200;
 }
-//********************************************************************************************************************************************************************
-// /////////////////////////////////////////////////Lets do the GATE LOGIC HERE////////////////////////////////////////////////////////////////////////////////////////
 // funtion to  latch data at the gate
 void latch2()
 {
@@ -135,8 +133,8 @@ void latch2()
 void lcd_cmd2(unsigned char cmd2)
 {
 	PORTA = cmd2;
-	PORTB &= ~(1 << PB0); // RS=0 FOR command mode
-	PORTB &= ~(1 << PB1); // RW=0 FOR write mode
+	PORTB &= ~(1 << PB0); 
+	PORTB &= ~(1 << PB1); 
 	latch2();
 }
 
@@ -144,18 +142,18 @@ void lcd_cmd2(unsigned char cmd2)
 void lcd_data2(unsigned char data2)
 {
 	PORTA = data2;
-	PORTB |= (1 << PB0);  // RS=0 FOR data mode
-	PORTB &= ~(1 << PB1); // RW=0 FOR write mode
+	PORTB |= (1 << PB0);  
+	PORTB &= ~(1 << PB1); 
 	latch2();
 }
 
 // function to initialize the LCD for the gate
 void lcd_init2()
 {
-	lcd_cmd2(0x38); // all lines and a 5x7 matrix
-	lcd_cmd2(0x0c); // display on, cursor off
-	lcd_cmd2(0x06); // increment cursor
-	lcd_cmd2(0x01); // clear screen
+	lcd_cmd2(0x38); 
+	lcd_cmd2(0x0c); 
+	lcd_cmd2(0x06); 
+	lcd_cmd2(0x01); 
 }
 
 // function to print data to the LCD for the gate
@@ -168,8 +166,6 @@ void lcd_data_print2(char info2[])
 	}
 }
 
-//*********************************************************************************************************************************************************************
-//////////////////////////////////////////////////////// LETS DO THE FRIDGE LOGIC HERE/////////////////////////////////////////////////////////////////////////////////
 // function to latch the data for FRIGE
 void latch()
 {
