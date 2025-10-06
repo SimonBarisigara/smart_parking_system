@@ -234,12 +234,10 @@ void captureDrinks()
 	lcd_data_print(bottles);
 	latch();
 
-	// Display the Amount and prompt confirmation // NOTE that every bottle is 1000 shillings
-	lcd_cmd(0x94); // row 3
+	lcd_cmd(0x94); 
 	lcd_data_print("Amount: ");
-	// Assuming each bottle costs 1000 shillings
 	int amount = bottle * 1000;
-	char amountString[5]; // Size 5 to hold up to 9999
+	char amountString[5];
 	sprintf(amountString, "%d", amount);
 	lcd_cmd(0xA2);
 	lcd_data_print(amountString);
@@ -259,12 +257,10 @@ void captureDrinks()
 	// evaluate the command
 	if (command == 1000)
 	{
-		// Call the servo function to dispense the drinks for the specified number of rotations
 		servo(bottle);
 	}
 	if (command == 100)
 	{
-		// Display the thank you message after confirmation
 		_delay_ms(1000);
 		lcd_cmd(0xD4); // row
 		lcd_data_print("Canceled...");
@@ -272,7 +268,6 @@ void captureDrinks()
 		latch();
 	}
 
-	// Display the thank you message after confirmation
 	_delay_ms(1000);
 	lcd_cmd(0xD4); // row
 	lcd_data_print("Order Again.");
@@ -280,7 +275,6 @@ void captureDrinks()
 	latch();
 }
 
-//*********************************************************************************************************************************************************************
 // function to display the welcome message
 
 
@@ -298,8 +292,8 @@ void displayWelcome()
 
 // funtion to do buzzer
 void buzzer()
-{					  // setting up the buzzer
-	DDRD |= (1 << 1); // setup DDR for the buzzer
+{					  
+	DDRD |= (1 << 1); 
 	PORTD |= (1 << 1);
 	_delay_ms(500);
 	PORTD &= ~(1 << 1);
@@ -309,14 +303,13 @@ void buzzer()
 
 void stopBuzer()
 {
-	DDRD &= ~(1 << 1); // stop the buzzer from ringing
-	cli();			   // disable external interrupts globally
-	//displayWelcome();  // Call the function to display the welcome message
+	DDRD &= ~(1 << 1); 
+	cli();			  
 	car_approaching();
 }
 
 void lcd_clear(){
-	lcd_cmd(0x01); //clear screen
+	lcd_cmd(0x01);
 }
 
 void lcd_print(char* data_print){
@@ -331,7 +324,7 @@ void lcd_print(char* data_print){
 void car_approaching(){
 	
 	lcd_init2();
-	lcd_cmd2(0x80); // row 1
+	lcd_cmd2(0x80); 
 	latch2();
 	lcd_data_print2("CAR APPROACHING");
 	latch2();
@@ -344,7 +337,7 @@ void car_approaching(){
 
 void registration(){
 	lcd_init2();
-	lcd_cmd2(0x80); // row 1
+	lcd_cmd2(0x80); 
 	latch2();
 	lcd_data_print2("REGISTRATION IN PROGRESS.");
 	latch2();
@@ -396,7 +389,7 @@ void gateclose(){
 // function for the servo motor
 void servo(int rotations)
 {
-	DDRJ |= (1 << 0); // Set PJ0 as output pin
+	DDRJ |= (1 << 0); 
 	PORTJ = 0x00;
 
 	for (int i = 0; i < rotations; ++i)
@@ -429,8 +422,6 @@ void servo(int rotations)
 // Initialize UART for ATmega2560
 void initUART()
 {
-	// Set baud rate to 9600 (for 16 MHz frequency)
-	// Set baud rate to 9600 (for example)
 	UBRR0H = (BAUD_PRESCALE >> 8);
 	UBRR0L = BAUD_PRESCALE;
 
@@ -440,8 +431,6 @@ void initUART()
 	// Set frame format: 8 data bits, 1 stop bit, no parity
 	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 
-	// Debug message
-	// sendString("UART Initialized at 9600 bps\r\n");
 }
 
 // Transmit a character via UART
@@ -521,8 +510,6 @@ void displayMenu()
 	sendString("Enter your choice: ");
 }
 
-// function to capture the user input from the user
-// Function to receive user input from UART
 void receiveUserInput(char *inputBuffer, int bufferSize)
 {
 	int index = 0;
@@ -531,34 +518,28 @@ void receiveUserInput(char *inputBuffer, int bufferSize)
 	// Read characters until Enter is pressed or buffer is full
 	while (1)
 	{
-		// Wait until data is available in the receive buffer
 		while (!(UCSR0A & (1 << RXC0)))
 			;
 
-		// Read the received character
 		receivedChar = UDR0;
 
-		// Handle backspace
 		if (receivedChar == '\b' && index > 0)
 		{
 			index--;
-			inputBuffer[index] = '\0'; // Null-terminate the string at the backspace position
+			inputBuffer[index] = '\0'; 
 		}
 		// Handle newline or carriage return
 		else if (receivedChar == '\r' || receivedChar == '\n')
 		{
-			// Null-terminate the string and exit the loop
 			inputBuffer[index] = '\0';
 			break;
 		}
-		// Store the character in the inputBuffer array if there is space
 		else if (index < bufferSize - 1)
 		{
 			inputBuffer[index++] = receivedChar;
-			inputBuffer[index] = '\0'; // Null-terminate the string
+			inputBuffer[index] = '\0'; 
 		}
 
-		// Echo the character back to the terminal
 		sendChar(receivedChar);
 	}
 }
@@ -569,7 +550,7 @@ void choiceChecker()
 
 	// call the display menu function
 	displayMenu();
-	char userInput[20]; // Assuming a maximum of 20 characters for user input
+	char userInput[20];
 	receiveUserInput(userInput, sizeof(userInput));
 
 	int choice = atoi(userInput);
